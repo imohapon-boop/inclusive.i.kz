@@ -1,0 +1,432 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inclusion.kz - Петропавловск</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function () {
+            emailjs.init("zq4mvtPFkeBe0J7p8");
+        })();
+    </script>
+
+    <!-- Firebase SDK (compat v10) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore-compat.js"></script>
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Floating Island Header -->
+    <div class="frame">
+        <header class="header">
+            <img class="whatsapp-image" src="whatsapp-image-2026-02-20-at-22-40-15-1.png" alt="Inclusive42 Logo" />
+            <nav class="navigation" role="navigation" aria-label="Main navigation">
+                <a href="#home" class="nav-link text-wrapper" aria-current="page"
+                    onclick="app.nav('home'); return false;">Главная</a>
+                <a href="#map" class="nav-link div" onclick="app.nav('map'); return false;">Карта</a>
+                <a href="#rating" class="nav-link text-wrapper-2"
+                    onclick="app.nav('leaderboard'); return false;">Рейтинг</a>
+                <a href="#volunteer" class="nav-link text-wrapper-3" onclick="app.nav('volunteer'); return false;">Я
+                    волонтер</a>
+                <a href="#help" class="nav-link text-wrapper-4" onclick="app.nav('request'); return false;">Мне нужна
+                    помощь</a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- HOME PAGE -->
+            <section id="page-home" class="page-section active-page">
+                <main class="main-content">
+                    <h1 class="p">Мы создаем пространство, где помощь рядом, а город становится доступным для каждого
+                    </h1>
+
+                    <div class="decorative-elements" aria-hidden="true">
+                        <div class="ellipse"></div>
+                        <div class="ellipse-2"></div>
+                        <div class="ellipse-3"></div>
+                    </div>
+                </main>
+            </section>
+
+            <!-- MAP (GOOGLE MY MAPS) -->
+            <section id="page-map" class="page-section" style="padding: 0; max-width: none;">
+                <div class="force-center section-content-limit">
+                    <div class="map-container glass-panel" style="border: none; width: 100%;">
+                        <iframe src="https://www.google.com/maps/d/embed?mid=13TX3vcZrFCVBT6wl0MB0zNNIlwzTrUY"
+                            width="100%" height="100%" style="border:none;"></iframe>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LEADERBOARD -->
+            <section id="page-leaderboard" class="page-section">
+                <div class="force-center section-content-limit">
+                    <div class="glass-panel"
+                        style="max-width: 800px; margin: 0 auto; padding: 40px; width: 100%; box-sizing: border-box;">
+                        <h2 class="section-header" style="color: gold !important;"><i class="fas fa-crown"></i>
+                            Топ Волонтеров</h2>
+                        <div class="rating-table-container">
+                            <table class="leaderboard-table" style="margin: 0 auto;">
+                                <thead>
+                                    <tr>
+                                        <th>Место</th>
+                                        <th>Имя</th>
+                                        <th>Рейтинг</th>
+                                        <th>Часов помощи</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leaderboard-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VOLUNTEER ZONE -->
+            <section id="page-volunteer" class="page-section">
+                <div class="force-center section-content-limit">
+                    <div class="glass-panel form-container" id="vol-reg-view"
+                        style="width: 100%; box-sizing: border-box;">
+                        <h2 class="section-header" style="color: var(--accent-green);">Регистрация Волонтера</h2>
+                        <form onsubmit="app.regVolunteer(event)">
+                            <div class="form-group" id="group-v-name">
+                                <label>ФИО</label>
+                                <input type="text" id="v-name" class="form-control" placeholder="Имя Фамилия" required>
+                                <div id="v-name-error" class="error-msg">Error: Names can only contain letters (A-Z,
+                                    А-Я).
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="v-email" class="form-control" required>
+                            </div>
+                            <div class="form-group" id="group-v-phone">
+                                <label>Телефон</label>
+                                <input type="tel" id="v-phone" class="form-control" placeholder="+77001234567"
+                                    value="+7" required>
+                                <div id="v-phone-error" class="error-msg">Error: Phone must start with + and contain
+                                    exactly
+                                    11
+                                    digits.</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Пароль</label>
+                                <input type="password" id="v-pass" class="form-control" required>
+                            </div>
+
+                            <button type="submit" id="btn-reg-submit" class="btn btn-primary"
+                                style="width: 100%;">Получить
+                                код</button>
+                        </form>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <button onclick="app.switchAuth('login')" class="btn-link">Уже есть аккаунт? Войти</button>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel form-container" id="vol-login-view"
+                        style="display: none; width: 100%; box-sizing: border-box;">
+                        <h2 class="section-header" style="color: var(--accent-green);">Войти</h2>
+                        <form onsubmit="app.loginVolunteer(event)">
+                            <div class="form-group"><label>Email</label><input type="email" id="login-email"
+                                    class="form-control" required></div>
+                            <div class="form-group"><label>Пароль</label><input type="password" id="login-pass"
+                                    class="form-control" required></div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Войти</button>
+                        </form>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <button onclick="app.switchAuth('register')" class="btn-link">Нет аккаунта?
+                                Регистрация</button>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel form-container" id="vol-verify-view"
+                        style="display: none; width: 100%; box-sizing: border-box;">
+                        <h2 class="section-header">Подтверждение Email</h2>
+                        <input type="text" id="verify-code-input" class="form-control"
+                            style="text-align: center; font-size: 1.5rem; letter-spacing: 5px; margin-bottom: 20px;"
+                            maxlength="4" placeholder="1234">
+                        <button onclick="app.checkCode()" class="btn btn-primary"
+                            style="width: 100%;">Подтвердить</button>
+                    </div>
+
+                    <div class="glass-panel form-container" id="vol-dashboard-view"
+                        style="display: none; max-width: 800px; width: 100%; box-sizing: border-box;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px;">
+                            <div style="width: 100%;">
+                                <h2 class="section-header"
+                                    style="text-align: left; margin-bottom: 5px; color: white !important;">Кабинет
+                                    Волонтера</h2>
+                                <div style="color: gold; font-size: 0.9rem; margin-top: 5px;">Помог раз: <span
+                                        id="vol-total-helps">0</span></div>
+                            </div>
+                            <button onclick="app.logoutVol()" class="btn btn-danger"
+                                style="padding: 5px 15px; font-size: 0.8rem;">Выйти</button>
+                        </div>
+
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value" id="stat-hours">0ч 0м</div>
+                                <div class="stat-label">Всего часов</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="stat-rating">0.0 <i class="fas fa-star"
+                                        style="font-size: 1rem; color:gold;"></i></div>
+                                <div class="stat-label">Мой Рейтинг</div>
+                            </div>
+                        </div>
+
+                        <!-- Analytics Zone: Replaces incoming request when empty, but always rendered -->
+                        <div id="analytics-heatmap-zone" style="display: none;"></div>
+
+                        <div
+                            style="display: flex; gap: 20px; align-items: center; margin-bottom: 30px; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px;">
+                            <div id="gps-status-dot" class="volunteer-pulse" style="background: grey; animation: none;">
+                            </div>
+                            <div style="flex-grow: 1;">
+                                <h3 id="gps-status-text">Вы оффлайн</h3>
+                                <p style="font-size: 0.8rem; color: #aaa;">Включите статус "Онлайн" для приема заявок.
+                                </p>
+                            </div>
+                            <button id="toggle-online-btn" class="btn btn-danger">Go Online</button>
+                        </div>
+
+                        <div id="incoming-request-zone" style="display: none;">
+                            <div class="incoming-alert">
+                                <h3 style="margin-bottom: 10px;"><i class="fas fa-bell"></i> НОВАЯ ЗАЯВКА!</h3>
+                                <p id="incoming-req-details" style="font-size: 1.1rem; margin-bottom: 20px;"></p>
+                                <div style="display: flex; gap: 10px;">
+                                    <button onclick="app.acceptRequest()" class="btn btn-primary"
+                                        style="background: white; color: black; font-weight: 900; flex: 2;">ПРИНЯТЬ
+                                        ЗАЯВКУ</button>
+                                    <button onclick="app.skipRequest()" class="btn btn-secondary"
+                                        style="background: grey; flex: 1; font-size: 0.8rem;">Пропустить
+                                        (Decline)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active Tasks Zone Used to Be Here -->
+
+                        <div id="my-reserved-tasks-zone" style="display: none; margin-bottom: 20px;">
+                            <h3 style="margin-bottom: 15px; color: var(--primary-blue);"><i
+                                    class="fas fa-calendar-check"></i>
+                                Мои Запланированные Задачи</h3>
+                            <div id="reserved-tasks-list" style="display: grid; gap: 15px;">
+                                <!-- Reserved tasks inserted here -->
+                            </div>
+                        </div>
+
+                        <div id="scheduled-tasks-zone" style="display: none; margin-bottom: 20px;">
+                            <h3 style="margin-bottom: 15px; color: var(--primary-purple);"><i
+                                    class="fas fa-calendar-alt"></i>
+                                Доступные Запланированные Задачи</h3>
+                            <div id="scheduled-tasks-list" style="display: grid; gap: 15px;">
+                                <!-- Scheduled tasks inserted here -->
+                            </div>
+                        </div>
+
+
+
+                        <!-- ACHIEVEMENTS ZONE -->
+                        <div id="achievements-zone" style="margin-top: 30px; margin-bottom: 20px;">
+                            <h3 style="margin-bottom: 15px; color: white;"><i class="fas fa-trophy"
+                                    style="color: gold;"></i> Мои Достижения</h3>
+                            <div class="glass-panel" style="padding: 20px;">
+                                <p style="font-size: 0.9rem; color: #aaa; margin-bottom: 10px;">Выполняйте заявки, чтобы
+                                    разблокировать уникальные бейджи.</p>
+                                <div id="achievements-grid" class="achievements-grid">
+                                    <!-- Badges injected here via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HELP REQUEST ZONE -->
+            <section id="page-request" class="page-section">
+                <div class="force-center section-content-limit">
+                    <div class="glass-panel form-container" id="request-form-container"
+                        style="width: 100%; box-sizing: border-box; transition: all 0.3s ease;">
+                        <h2 class="section-header" style="color: var(--accent-green);">Попросить Помощь</h2>
+
+                        <!-- Voice SOS Dual Trigger -->
+                        <button type="button" onclick="app.startVoiceSOS()" class="btn pulse-icon"
+                            style="background: #ef4444; color: white; width: 100%; margin-bottom: 20px; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; gap: 10px; border: none; border-radius: 8px; padding: 15px;">
+                            <i class="fas fa-microphone" style="font-size: 1.5rem;"></i> Голосовой SOS (Начни запись)
+                        </button>
+                        <div id="voice-sos-status"
+                            style="display: none; text-align: center; color: #ef4444; font-weight: bold; margin-bottom: 15px; animation: pulse-red 1.5s infinite;">
+                            <i class="fas fa-circle" style="font-size: 0.8rem;"></i> Записываю... Говорите (Имя,
+                            телефон, адрес)
+                        </div>
+
+                        <form onsubmit="app.submitRequest(event)">
+                            <div class="form-group"><label>Ваше Имя</label><input type="text" id="r-name"
+                                    class="form-control" placeholder="Только буквы" required></div>
+                            <div class="form-group"><label>Телефон</label><input type="tel" id="r-phone"
+                                    class="form-control" value="+7" placeholder="+77001234567" required></div>
+                            <div class="form-group"><label>Что случилось?</label>
+                                <select id="r-type" class="form-control">
+                                    <option>Сопровождение</option>
+                                    <option>Продукты/Аптека</option>
+                                    <option>Помощь с коляской</option>
+                                    <option>Другое</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>Где вы?</label><textarea id="r-details" class="form-control"
+                                    rows="2" required placeholder="Адрес или ориентир..."></textarea></div>
+                            <div class="form-group"><label>Время подачи помощи</label>
+                                <select id="r-timing" class="form-control" onchange="app.toggleTiming()">
+                                    <option value="now">Как можно скорее (Сейчас)</option>
+                                    <option value="scheduled">Запланировать заранее (Позже)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="r-datetime-group" style="display: none;"><label>Выберите дату и
+                                    время</label>
+                                <input type="datetime-local" id="r-datetime" class="form-control" min="">
+                            </div>
+                            <div class="form-group"><label>Сколько волонтеров нужно?</label>
+                                <input type="number" id="r-needed" class="form-control" min="1" max="10" value="1"
+                                    required>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Разместить
+                                Заявку</button>
+                        </form>
+                    </div>
+
+                    <div class="glass-panel form-container" id="user-cabinet-zone"
+                        style="display: none; margin-top: 20px; width: 100%; box-sizing: border-box;">
+                        <h2 class="section-header" style="color: var(--accent-green);">Ваша заявка</h2>
+                        <div id="user-cabinet-content"
+                            style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
+                            <!-- Dynamic content injected here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ADMIN -->
+            <section id="page-admin" class="page-section">
+                <div class="glass-panel form-container" id="admin-login-view"
+                    style="max-width: 400px; margin-top: 50px;">
+                    <h2 style="text-align: center; margin-bottom: 20px;">Вход</h2>
+                    <input type="password" id="admin-pass" class="form-control" placeholder="Пароль"
+                        style="margin-bottom: 20px;">
+                    <button onclick="app.loginAdmin()" class="btn btn-primary" style="width: 100%;">Войти</button>
+                </div>
+                <div id="admin-dash-view" style="display: none;">
+                    <div class="glass-panel" style="padding: 20px;">
+                        <button onclick="app.renderAdmin()" class="btn btn-outline"
+                            style="margin-bottom: 10px;">Обновить
+                            данные</button>
+                        <button onclick="app.resetDatabase()" class="btn btn-danger"
+                            style="margin-bottom: 10px; margin-left: 10px;">Очистить Базу Данных</button>
+                        <pre id="admin-data" style="white-space: pre-wrap; color: #ccc; font-size: 0.9rem;"></pre>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <!-- Back to Top Button -->
+        <div id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <i class="fas fa-arrow-up" style="color: white; font-size: 1.2rem;"></i>
+        </div>
+
+        <!-- MODALS -->
+        <div id="modal-searching" class="status-modal">
+            <div class="glass-panel status-content">
+                <div class="spinner"></div>
+                <h3>Поиск волонтера...</h3>
+                <p id="search-status-details">Оповещаем помощников...</p>
+            </div>
+        </div>
+
+        <div id="modal-match" class="status-modal">
+            <div class="glass-panel status-content">
+                <i class="fas fa-check-circle"
+                    style="font-size: 4rem; color: var(--accent-green); margin-bottom: 20px;"></i>
+                <h3>Волонтер Найден!</h3>
+                <p id="match-text" style="font-size: 1.2rem; margin: 15px 0; font-weight: bold;"></p>
+                <div
+                    style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 25px; text-align: left;">
+                    <p style="font-size: 0.9rem; color: #aaa; margin-bottom: 5px;"><i class="fas fa-info-circle"></i>
+                        Инструкция:</p>
+                    <p style="font-size: 0.9rem;">1. Ожидайте прибытия волонтера.<br>2. Получите помощь.<br>3.
+                        <b>Нажмите
+                            кнопку ниже</b>, чтобы подтвердить выполнение.
+                    </p>
+                </div>
+                <button onclick="app.userConfirmCompletion()" class="btn btn-primary"
+                    style="width: 100%; padding: 15px;">ПОМОЩЬ ПОЛУЧЕНА (ЗАВЕРШИТЬ)</button>
+            </div>
+        </div>
+
+        <div id="modal-review" class="status-modal">
+            <div class="glass-panel status-content">
+                <h3>Оцените помощь команды</h3>
+                <div id="dynamic-ratings" style="margin: 20px 0;">
+                    <!-- Rating rows will be injected here -->
+                </div>
+                <textarea id="review-text" class="form-control" placeholder="Комментарий..." rows="3"
+                    style="margin-bottom: 20px;"></textarea>
+                <button onclick="app.submitReview()" class="btn btn-primary">Отправить и Закрыть</button>
+            </div>
+        </div>
+
+        <!-- PUBLIC PROFILE POPOVER (Moved to script initialization to force document.body detach) -->
+        <div id="modal-public-profile"
+            style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999998;"
+            onclick="if(event.target === this) this.style.display='none'">
+            <div class="popover-profile-content" id="pub-profile-card">
+                <button onclick="document.getElementById('modal-public-profile').style.display='none'"
+                    style="position: absolute; top: 10px; right: 10px; background: transparent; border: none; color: white; font-size: 1.2rem; cursor: pointer;"><i
+                        class="fas fa-times"></i></button>
+                <div class="profile-avatar" style="width: 60px; height: 60px; font-size: 2rem; margin-bottom: 10px;"><i
+                        class="fas fa-user-astronaut"></i></div>
+                <div class="profile-vol-name" id="pub-profile-name" style="font-size: 1.2rem;">Загрузка...</div>
+
+                <div
+                    style="display: flex; justify-content: space-around; margin: 15px 0; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;">
+                    <div>
+                        <div style="color: #ccc; font-size: 0.75rem; margin-bottom: 3px;">Рейтинг</div>
+                        <div style="font-size: 1.1rem; font-weight: bold;" id="pub-profile-rating">0.0 <i
+                                class="fas fa-star" style="color: #4B0082;"></i></div>
+                    </div>
+                    <div>
+                        <div style="color: #ccc; font-size: 0.75rem; margin-bottom: 3px;">Помог раз</div>
+                        <div style="font-size: 1.1rem; font-weight: bold;" id="pub-profile-count">0</div>
+                    </div>
+                </div>
+
+                <div id="pub-profile-badges" class="profile-badges-grid"
+                    style="grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); padding: 10px; gap: 8px; max-height: 150px;">
+                    <!-- Badges go here -->
+                </div>
+            </div>
+        </div>
+
+        <div id="toast-container" class="toast-container"></div>
+
+        <!-- Global Sticky Mobile SOS Button -->
+        <button onclick="app.sos()" class="sos-button-main pulse-icon">SOS</button>
+
+        <!-- Firebase SDK (compat v10) is loaded in head -->
+        <script src="js/config/firebase-config.js"></script>
+        <script src="js/services/email.js"></script>
+        <script src="js/services/gemini.js"></script>
+        <script src="js/services/auth.js"></script>
+        <script src="js/app.js"></script>
+</body>
+
+</html>
